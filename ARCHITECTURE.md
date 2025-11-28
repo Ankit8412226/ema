@@ -13,6 +13,24 @@ Unlike traditional automation (RPA) which follows rigid rules, or simple chatbot
 
 EMA is built using **LangGraph**, a library for building stateful, multi-actor applications with LLMs.
 
+### Visualizing the Workflow
+
+```mermaid
+graph TD
+    Start([New Claim / FNOL]) --> Orchestrator{Orchestrator Agent}
+    
+    Orchestrator -->|Needs Info| EvidenceExtractor[Evidence Extractor]
+    Orchestrator -->|Check Rules| PolicyInterpreter[Policy Interpreter]
+    Orchestrator -->|Suspicious| FraudDetector[Fraud Detector]
+    
+    EvidenceExtractor -->|Structured Data| Orchestrator
+    PolicyInterpreter -->|Coverage Status| Orchestrator
+    FraudDetector -->|Risk Score| Orchestrator
+    
+    Orchestrator -->|All Clear| AutoApprove([Auto-Approve & Pay])
+    Orchestrator -->|Issues Found| HumanReview([Flag for Human Review])
+```
+
 ### The "Brain" (Orchestrator Pattern)
 Instead of one giant prompt trying to do everything, we break the workflow into specialized nodes.
 
@@ -35,6 +53,36 @@ The "State" (a dictionary containing messages, claim data, and errors) is passed
 *   `Start` -> `Orchestrator` -> `Evidence Extractor` -> `Policy Interpreter` -> `Fraud Detector` -> `End`
 
 ## 3. Technology Stack Explained
+
+### System Architecture Diagram
+
+```mermaid
+graph LR
+    subgraph Frontend [Next.js Frontend]
+        UI[Dashboard UI]
+        API_Client[API Client]
+    end
+    
+    subgraph Backend [FastAPI Backend]
+        API[API Endpoints]
+        Orchestrator[LangGraph Orchestrator]
+        Agents[Specialized Agents]
+    end
+    
+    subgraph Cloud [Cloud Services]
+        Azure[Azure OpenAI (GPT-4o)]
+        SupabaseDB[(Supabase DB)]
+        SupabaseStore[Supabase Storage]
+    end
+    
+    UI --> API_Client
+    API_Client -->|JSON| API
+    API --> Orchestrator
+    Orchestrator --> Agents
+    Agents -->|Prompts| Azure
+    Agents -->|SQL| SupabaseDB
+    Agents -->|Files| SupabaseStore
+```
 
 ### Frontend: The "Command Center"
 *   **Next.js 14 (App Router)**: Chosen for its server-side rendering (SEO/Performance) and easy API integration.
