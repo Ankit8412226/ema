@@ -25,7 +25,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 <div className="p-6 border-b border-border flex items-center justify-center">
                     <div className="relative w-32 h-12">
                         <Image
-                            src="/Ema-full-logo-color.webp"
+                            src="/ema_unlimited_logo.jpeg"
                             alt="EMA Logo"
                             fill
                             className="object-contain"
