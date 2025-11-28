@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   title: "EMA - Enterprise Multi-Agent Assistant",
   description: "AI-powered insurance claims processing and management platform",
   icons: {
-    icon: '/ema_unlimited_logo.jpeg',
-    shortcut: '/ema_unlimited_logo.jpeg',
-    apple: '/ema_unlimited_logo.jpeg',
+    icon: '/Ema-full-logo-color.webp',
+    shortcut: '/Ema-full-logo-color.webp',
+    apple: '/Ema-full-logo-color.webp',
   },
 };
 
