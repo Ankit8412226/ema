@@ -1,32 +1,94 @@
 # EMA: The Universal AI Employee for Insurance Claims
 
-EMA (Enterprise Multi-Agent Assistant) is an autonomous AI agent designed to revolutionize the insurance claims lifecycle. It acts as a "Universal AI Employee," capable of handling complex, multi-step workflows that traditionally require human intervention.
+![EMA Logo](frontend/public/Ema-full-logo-color.webp)
 
-![EMA Dashboard](frontend/public/Ema-full-logo-color.webp)
+**EMA (Enterprise Multi-Agent Assistant)** is an autonomous, agentic AI system designed to revolutionize the insurance claims lifecycle. It moves beyond simple chatbots to act as a proactive "Universal AI Employee" that can execute complex workflows, analyze unstructured data, and make intelligent decisions.
 
-## 🚀 Features
+---
 
-*   **Autonomous Claims Triage**: Instantly ingests First Notice of Loss (FNOL), analyzes severity, and assigns a risk score.
-*   **Smart Document Analysis**: Uses Azure OpenAI (GPT-4o) to read unstructured documents (PDFs, invoices), extract line items, and validate costs against policy logic.
-*   **Agentic Workflow**: A multi-agent system (built with LangGraph) that proactively verifies coverage, detects fraud, and drafts communication.
-*   **Interactive Assistant**: A chat interface where adjusters can ask complex questions about claims, policies, or risks.
-*   **Executive Analytics**: Real-time dashboard showing auto-approval rates, processing times, and cost savings.
+## 🚨 The Problem
 
-## 🛠️ Tech Stack
+The insurance claims process is currently broken:
 
-### Frontend
-*   **Framework**: Next.js 14 (App Router)
-*   **Styling**: Tailwind CSS
-*   **Icons**: Heroicons
-*   **State Management**: React Hooks
+1.  **Slow Turnaround**: Simple claims can take weeks to settle due to manual data entry and review queues.
+2.  **Fragmented Data**: Adjusters have to toggle between emails, PDF invoices, policy documents, and legacy mainframes.
+3.  **High Operational Costs**: A significant portion of premiums goes towards administrative overhead rather than claims payout.
+4.  **Inconsistent Decisions**: Different adjusters might interpret policies differently, leading to leakage or unfair denials.
 
-### Backend
-*   **Framework**: FastAPI (Python)
-*   **AI Orchestration**: LangChain & LangGraph
-*   **LLM**: Azure OpenAI (GPT-4o / GPT-4o-mini)
-*   **Database**: Supabase (PostgreSQL) & Supabase Storage
+## 💡 The Solution: EMA
 
-## 📦 Installation
+EMA is not just a tool; it's an **autonomous agent** that sits alongside your human team.
+
+*   **It Reads**: EMA uses Multimodal AI (GPT-4o) to read PDF estimates, handwritten notes, and crash photos just like a human would.
+*   **It Thinks**: Using a graph-based architecture (LangGraph), EMA reasons about coverage, liability, and fraud risks.
+*   **It Acts**: EMA can draft emails, schedule payments, and update claim statuses in the database.
+
+---
+
+## 🌟 Key Features
+
+### 1. Autonomous Triage (FNOL)
+EMA instantly ingests "First Notice of Loss" data. It analyzes the incident description and vehicle details to assign a **Risk Score** and **Severity Level** in milliseconds, prioritizing high-risk claims for human review.
+
+### 2. Smart Document Analysis
+Upload a raw PDF repair estimate from a body shop. EMA's **Evidence Extractor** agent will:
+*   Extract every line item (parts, labor, tax).
+*   Identify the vendor.
+*   Compare labor rates against regional averages.
+*   Flag non-OEM parts if the policy requires them.
+
+### 3. Agentic Workflow
+EMA isn't a single script. It's a team of specialized agents:
+*   **Orchestrator**: The manager that routes tasks.
+*   **Policy Interpreter**: The legal expert that verifies coverage.
+*   **Fraud Detector**: The analyst that spots anomalies.
+
+### 4. Interactive "Co-Pilot" Chat
+Adjusters can chat with EMA to get answers without digging through files.
+*   *"Why was this claim flagged?"*
+*   *"Draft a rejection letter for the bumper repair."*
+*   *"Summarize the policy limits for this customer."*
+
+---
+
+## 🏗️ Architecture & Technology
+
+EMA is built on a modern, enterprise-grade stack designed for scalability and security.
+
+> **[See the Full Architecture Deep Dive here](ARCHITECTURE.md)** for diagrams and detailed technical explanations.
+
+*   **Frontend**: Next.js 14 (React) + Tailwind CSS
+*   **Backend**: FastAPI (Python)
+*   **AI Engine**: Azure OpenAI Service (GPT-4o)
+*   **Orchestration**: LangChain & LangGraph
+*   **Database**: Supabase (PostgreSQL)
+
+---
+
+## 🎬 Demo Walkthrough
+
+Follow this flow to experience the full power of EMA:
+
+### Scene 1: The Command Center
+1.  Open the Dashboard. You'll see the **Claims Inbox**.
+2.  Notice the "Risk Score" column. EMA has already pre-processed these claims.
+3.  Click **"+ New Claim"** to simulate a new accident report. Watch it appear instantly with a calculated confidence score.
+
+### Scene 2: Deep Analysis
+1.  Click on a claim (e.g., `CLM-2025-001`).
+2.  On the right, see the **Agent Activity Log**. This shows the "thought process" of the AI (e.g., "Verified Coverage", "Flagged Risk").
+3.  Click **"View Policy Doc"** on the left.
+4.  Click **"Analyze with AI"**. EMA will read the "mock" PDF invoice and extract structured data (Line Items, Total Cost) and run a Fraud Check.
+
+### Scene 3: The Assistant
+1.  Close the document modal.
+2.  Switch the right-hand tab to **"EMA Assistant"**.
+3.  Ask it a question: *"Draft an email to Alice confirming we received her claim."*
+4.  EMA generates a professional, context-aware response.
+
+---
+
+## 📦 Installation & Setup
 
 ### Prerequisites
 *   Node.js (v18+)
@@ -48,7 +110,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the `backend` directory:
+Create a `.env` file in `backend/`:
 ```env
 AZURE_OPENAI_API_KEY=your_key
 AZURE_OPENAI_ENDPOINT=your_endpoint
@@ -70,15 +132,9 @@ npm install
 npm run dev
 ```
 
-Visit `http://localhost:3000` to see EMA in action.
+Visit `http://localhost:3000` to launch EMA.
 
-## 🎬 Demo Flow
-
-1.  **Dashboard**: View the "Claims Inbox" with pre-scored risks.
-2.  **New Claim**: Click "+ New Claim" to simulate an FNOL intake.
-3.  **Claim Detail**: Open a claim to see the "Agent Activity Log" (Evidence Extractor, Fraud Detector, etc.).
-4.  **Document Analysis**: Click "View Policy Doc" -> "Analyze with AI" to see the LLM extract data from a raw invoice.
-5.  **Assistant**: Use the chat to ask "Why was this flagged?" or "Draft an email to the customer."
+---
 
 ## 📄 License
-MIT
+MIT License.
