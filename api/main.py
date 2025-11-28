@@ -23,11 +23,11 @@ app.add_middleware(
 # -----------------------------
 #       IMPORTS (FIXED)
 # -----------------------------
-# All imports must point to backend.*
-from backend.agent import get_agent_response
-from backend.mock_data import CLAIMS, ANALYTICS
-from backend.agents.claims_agent import analyze_claim_document
-from backend.supabase_client import supabase
+# All imports point to local modules
+from agent import get_agent_response
+from mock_data import CLAIMS, ANALYTICS
+from agents.claims_agent import analyze_claim_document
+from supabase_client import supabase
 
 
 # -----------------------------
