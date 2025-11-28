@@ -2,98 +2,145 @@
 
 ![EMA Logo](frontend/public/Ema-full-logo-color.webp)
 
-**EMA (Enterprise Multi-Agent Assistant)** is an autonomous, agentic AI system designed to revolutionize the insurance claims lifecycle. It moves beyond simple chatbots to act as a proactive "Universal AI Employee" that can execute complex workflows, analyze unstructured data, and make intelligent decisions.
+**EMA (Enterprise Multi-Agent Assistant)** is an autonomous, agentic AI system designed to revolutionize the motor claims lifecycle. It moves beyond simple chatbots to act as a proactive "Universal AI Employee" that can execute complex workflows, analyze unstructured data, and make intelligent decisions.
 
 ---
 
-## 🚨 The Problem: The "Claims Crisis"
+## 📉 Industry Context: The "Claims Crisis"
 
-Insurance claims are the moment of truth for customers, yet the backend process is often stuck in the past.
+Motor insurance is a high-frequency, moderate-severity business. The claims process is the core "moment of truth" for customers, yet it is bogged down by manual work.
 
-### 1. The "Swivel Chair" Effect
-Adjusters spend **40-60% of their day** just moving data between systems. They toggle between emails, PDF invoices, policy documents, and legacy mainframes. This context switching kills productivity.
+### The End-to-End Claims Value Chain
+Currently, this process involves multiple handoffs and dependencies on external partners.
 
-### 2. Unstructured Data Overload
-Claims run on documents—handwritten notes, police reports, crash photos, and repair estimates. Traditional automation (RPA) breaks when it encounters this "messy" data, forcing humans to manually read and key in every line item.
+```mermaid
+graph LR
+    FNOL[First Notice of Loss] --> Triage[Triage & Assignment]
+    Triage --> Investigate[Investigation & Evidence]
+    Investigate --> Decision[Liability & Coverage]
+    Decision --> Settlement[Settlement & Payout]
+    
+    style FNOL fill:#f9f,stroke:#333,stroke-width:2px
+    style Settlement fill:#bbf,stroke:#333,stroke-width:2px
+```
 
-### 3. Inconsistent Decision Making
-With thousands of claims and hundreds of adjusters, consistency is impossible. One adjuster might approve a $500 bumper repair, while another rejects it based on a different interpretation of the same policy. This leads to **claims leakage** (overpayment) or unfair denials.
+### The Pain Points (MECE Problem Tree)
+The core problem is **"High Cost + Low NPS"**.
 
-### 4. Slow Turnaround Time
-Because of these bottlenecks, a simple auto claim can take **2-3 weeks** to settle. In the age of Amazon and Uber, customers expect instant resolution.
-
----
-
-## 🧠 Our Approach: The "Universal AI Employee"
-
-We didn't just want to build another "tool" for adjusters. We wanted to build a **teammate**.
-
-### The Paradigm Shift
-*   **Old Way (Tools)**: The human does the work, using software to record it.
-*   **New Way (Agents)**: The AI does the work, and the human supervises it.
-
-EMA is built on **Agentic Architecture**. It doesn't just wait for input; it proactively:
-1.  **Observes**: Monitors the claims inbox for new FNOL (First Notice of Loss).
-2.  **Thinks**: Uses LLMs to reason about coverage, liability, and fraud.
-3.  **Acts**: Extracts data, updates databases, and drafts communications.
-
----
-
-## ⚡ Current Prototype Capabilities
-
-The current version of EMA is a fully functional prototype demonstrating the "Happy Path" of a high-tech claims workflow.
-
-### 1. Autonomous Triage (FNOL)
-*   **What it does**: Instantly ingests new claims.
-*   **The Magic**: It analyzes the incident description and vehicle details to assign a **Risk Score** and **Severity Level** in milliseconds.
-*   **Benefit**: High-risk claims are prioritized immediately.
-
-### 2. Smart Document Analysis (Evidence Extractor)
-*   **What it does**: Reads raw PDF repair estimates.
-*   **The Magic**: Using GPT-4o, it extracts every line item (parts, labor, tax), identifies the vendor, and compares costs against policy limits.
-*   **Benefit**: Turns "unstructured" PDFs into "structured" database records instantly.
-
-### 3. Multi-Agent Reasoning
-*   **What it does**: A team of specialized agents (Policy Interpreter, Fraud Detector) works in the background.
-*   **The Magic**: Before a human even opens the file, EMA has already verified coverage and flagged potential fraud (e.g., "Labor rate > $100/hr").
-
-### 4. Interactive Co-Pilot
-*   **What it does**: A chat interface for the adjuster.
-*   **The Magic**: You can ask, *"Why was this flagged?"* or *"Draft a rejection letter."* EMA has full context of the specific claim and policy.
+```mermaid
+mindmap
+  root((High Cost + Low NPS))
+    Customer Experience
+      Long cycle times
+      Lack of transparency
+      Repeated document requests
+    Operational Efficiency
+      Adjusters chasing info
+      Data re-entry (Swivel Chair)
+      Manual coordination
+    Risk & Fraud
+      Inconsistent adjudication
+      Late fraud detection
+      Claims leakage
+```
 
 ---
 
-## 🚀 Future Scope & Roadmap
+## 🧠 Core Concept: Agentic AI as the Step-Change
 
-We are building towards a fully autonomous claims organization.
+Legacy automation (RPA) waits for humans to decide. **Agentic AI** reverses this. EMA is an AI employee that can:
+1.  **Autonomously Reason**: "This photo shows damage inconsistent with the description."
+2.  **Plan**: "I need to ask the claimant for a police report."
+3.  **Act**: Sends the email, updates the DB, and triggers the payment.
 
-### Phase 1: Enhanced Perception (Next Quarter)
-*   **Computer Vision**: Analyze crash photos to automatically estimate repair costs (e.g., "Dented bumper = $800").
-*   **Voice Agents**: AI that calls the customer to schedule an inspection or ask for missing details.
+### The Solution: EMA Claims Orchestrator
+EMA acts as a layer of intelligence on top of your existing systems.
 
-### Phase 2: Deep Integration (Year 1)
-*   **Payment Rails**: Integration with Stripe/Zelle to issue instant payouts upon approval.
-*   **Legacy Sync**: Two-way sync with Guidewire/Duck Creek to act as a modern layer on top of old systems.
+```mermaid
+graph TD
+    subgraph "Experience Layer"
+        AdjusterConsole[Adjuster Console]
+        ClaimantUI[Claimant Interface]
+    end
 
-### Phase 3: Autonomous Adjudication (Year 2+)
-*   **Touchless Claims**: Simple claims (e.g., windshield cracks) are handled 100% by EMA without human intervention.
-*   **Predictive Policy**: Using claims data to inform underwriting and pricing in real-time.
+    subgraph "AI Employee Layer (EMA)"
+        Orchestrator{Claims Orchestrator}
+        EvidenceAgent[Evidence Agent]
+        VisionAgent[Vision Estimator]
+        PolicyAgent[Policy Agent]
+        FraudAgent[Fraud Signal Agent]
+    end
+
+    subgraph "Enterprise Integration Layer"
+        CoreSystem[(Core Claims DB)]
+        DMS[(Document Mgmt)]
+        Payments[Payment Rails]
+    end
+
+    AdjusterConsole <--> Orchestrator
+    Orchestrator <--> EvidenceAgent
+    Orchestrator <--> VisionAgent
+    Orchestrator <--> PolicyAgent
+    Orchestrator <--> FraudAgent
+    
+    EvidenceAgent <--> DMS
+    Orchestrator <--> CoreSystem
+    Orchestrator --> Payments
+```
 
 ---
 
-## 🏗️ Architecture
+## 🤖 Agent Pod Design
 
-> **[Read the Full Architecture Deep Dive](ARCHITECTURE.md)**
+EMA isn't a single model; it's a coordinated pod of specialized agents.
 
-*   **Frontend**: Next.js 14, Tailwind CSS
-*   **Backend**: FastAPI, Python
-*   **AI Orchestration**: LangGraph (Multi-Agent System)
-*   **LLM**: Azure OpenAI (GPT-4o)
-*   **Database**: Supabase
+| Agent | Role | Capabilities |
+|-------|------|--------------|
+| **Intake Sync Agent** | The Scribe | Retrieves claim/FNOL data, creates case files. |
+| **Evidence Agent** | The Investigator | Interacts with claimants, chases documents, reads emails. |
+| **Vision Damage Agent** | The Appraiser | Uses Computer Vision to estimate repair costs from photos. |
+| **Policy Agent** | The Lawyer | Translates PDF policies into executable code/rules. |
+| **Fraud Signal Agent** | The Detective | Performs anomaly detection and SIU flagging. |
 
 ---
 
-## 📦 Installation
+## 📱 Prototype Journey & Wireframes
+
+The current prototype demonstrates the "Happy Path" for a Type A/B (Low/Medium Complexity) claim.
+
+### 1. The Command Center (Dashboard)
+*   **Visual**: A unified workspace showing the **Claims Inbox**.
+*   **Feature**: "Risk Score" column pre-calculated by the Orchestrator.
+*   **Action**: Adjusters can sort by "Severity" to prioritize work.
+
+### 2. Claim 360 & Evidence Graph
+*   **Visual**: A dynamic graph visualization.
+*   **Concept**: All entities (Claimant, Vehicle, Photos, Policy) are nodes. As agents work, they add edges (relationships) to this graph.
+*   **UI**: The **Agent Activity Log** on the right shows real-time updates ("Verified Coverage", "Flagged Risk").
+
+### 3. Smart Document Analysis
+*   **Visual**: Split screen. PDF on the left, Extracted Data on the right.
+*   **Tech**: GPT-4o reads raw repair estimates.
+*   **Outcome**: Converts unstructured PDF text into structured Line Items (Parts, Labor, Tax) and validates against policy limits.
+
+### 4. Settlement Recommendation
+*   **Visual**: A drawer/modal popping up from the bottom.
+*   **Content**: Recommended Payout Amount, Confidence Score, and "Approve" button.
+*   **Governance**: High-value payouts require human click; low-value can be auto-approved (future scope).
+
+---
+
+## 🛠️ Technology Stack
+
+*   **Frontend**: Next.js 14 (App Router), Tailwind CSS, React Flow (for graphs).
+*   **Backend**: FastAPI (Python), Pydantic.
+*   **AI Orchestration**: LangChain & LangGraph.
+*   **LLM**: Azure OpenAI Service (GPT-4o).
+*   **Database**: Supabase (PostgreSQL).
+
+---
+
+## 📦 Installation & Setup
 
 1.  **Clone**: `git clone https://github.com/Kulraj69/ema.git`
 2.  **Backend**:
