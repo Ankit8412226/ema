@@ -33,7 +33,7 @@ const ChatInterface: React.FC = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/chat', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ema-tyxf.vercel.app'}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

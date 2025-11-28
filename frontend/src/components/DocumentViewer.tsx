@@ -29,7 +29,7 @@ export default function DocumentViewer({ isOpen, onClose, documentUrl }: Documen
         TOTAL                       $1,315.00
       `;
 
-            const response = await fetch('http://localhost:8000/analyze', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ema-tyxf.vercel.app'}/analyze`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

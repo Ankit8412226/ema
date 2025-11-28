@@ -14,7 +14,7 @@ const ClaimsInbox: React.FC = () => {
 
     React.useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:8000/claims')
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ema-tyxf.vercel.app'}/claims`)
             .then(res => {
                 if (!res.ok) throw new Error('Failed to fetch claims');
                 return res.json();
@@ -42,7 +42,7 @@ const ClaimsInbox: React.FC = () => {
         };
 
         try {
-            const res = await fetch('http://localhost:8000/claims', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ema-tyxf.vercel.app'}/claims`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newClaim)
