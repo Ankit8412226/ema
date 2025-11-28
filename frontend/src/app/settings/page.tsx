@@ -1,56 +1,76 @@
 "use client";
 
-import React from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
-import { UserCircleIcon, BellIcon, ShieldCheckIcon, CreditCardIcon } from '@heroicons/react/24/outline';
-
-const settingsSections = [
-    {
-        title: 'Profile Settings',
-        icon: UserCircleIcon,
-        items: ['Personal Information', 'Notification Preferences', 'Language & Region']
-    },
-    {
-        title: 'Security',
-        icon: ShieldCheckIcon,
-        items: ['Password & Authentication', 'API Keys', 'Session Management']
-    },
-    {
-        title: 'Billing & Plans',
-        icon: CreditCardIcon,
-        items: ['Current Plan', 'Payment Methods', 'Billing History']
-    }
-];
 
 export default function SettingsPage() {
     return (
         <DashboardLayout>
-            <div className="max-w-4xl mx-auto space-y-8">
+            <div className="max-w-2xl space-y-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
-                    <p className="text-muted">Manage your account preferences and system configurations.</p>
+                    <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+                    <p className="text-muted">Manage your account and application preferences.</p>
                 </div>
 
-                <div className="space-y-6">
-                    {settingsSections.map((section) => (
-                        <div key={section.title} className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-                            <div className="p-6 border-b border-border flex items-center gap-3 bg-secondary/30">
-                                <section.icon className="w-6 h-6 text-accent" />
-                                <h3 className="text-lg font-semibold text-foreground">{section.title}</h3>
+                <div className="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-border">
+                        <h3 className="font-semibold text-foreground mb-1">Profile Information</h3>
+                        <p className="text-sm text-muted">Update your personal details.</p>
+                    </div>
+                    <div className="p-6 space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-foreground mb-1">First Name</label>
+                                <input type="text" defaultValue="John" className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
                             </div>
-                            <div className="divide-y divide-border">
-                                {section.items.map((item) => (
-                                    <button
-                                        key={item}
-                                        className="w-full px-6 py-4 text-left text-sm text-foreground hover:bg-slate-50 transition-colors flex items-center justify-between group"
-                                    >
-                                        {item}
-                                        <span className="text-muted group-hover:text-accent transition-colors">Edit</span>
-                                    </button>
-                                ))}
+                            <div>
+                                <label className="block text-sm font-medium text-foreground mb-1">Last Name</label>
+                                <input type="text" defaultValue="Smith" className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
                             </div>
                         </div>
-                    ))}
+                        <div>
+                            <label className="block text-sm font-medium text-foreground mb-1">Email Address</label>
+                            <input type="email" defaultValue="john.smith@ema-insurance.com" className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent/20" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-foreground mb-1">Role</label>
+                            <input type="text" defaultValue="Senior Claims Adjuster" disabled className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-slate-50 text-muted" />
+                        </div>
+                    </div>
+                    <div className="px-6 py-4 bg-slate-50 border-t border-border flex justify-end">
+                        <button className="px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <div className="bg-white border border-border rounded-xl shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-border">
+                        <h3 className="font-semibold text-foreground mb-1">Notifications</h3>
+                        <p className="text-sm text-muted">Control how you receive alerts.</p>
+                    </div>
+                    <div className="p-6 space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h4 className="text-sm font-medium text-foreground">Email Notifications</h4>
+                                <p className="text-xs text-muted">Receive daily summaries and critical alerts.</p>
+                            </div>
+                            <input type="checkbox" defaultChecked className="toggle" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h4 className="text-sm font-medium text-foreground">Desktop Push Notifications</h4>
+                                <p className="text-xs text-muted">Real-time alerts for new claims.</p>
+                            </div>
+                            <input type="checkbox" defaultChecked className="toggle" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h4 className="text-sm font-medium text-foreground">Weekly Reports</h4>
+                                <p className="text-xs text-muted">Receive weekly performance analytics.</p>
+                            </div>
+                            <input type="checkbox" className="toggle" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </DashboardLayout>

@@ -1,12 +1,12 @@
 "use client";
 
-import React from 'react';
-import DashboardLayout from '@/components/DashboardLayout';
-import ChatInterface from '@/components/ChatInterface';
 import ActivityLog from '@/components/ActivityLog';
+import ChatInterface from '@/components/ChatInterface';
+import DashboardLayout from '@/components/DashboardLayout';
 import DocumentViewer from '@/components/DocumentViewer';
-import { ReactFlow, Background, Controls, useNodesState, useEdgesState } from '@xyflow/react';
+import { addEdge, Background, Connection, Controls, ReactFlow, useEdgesState, useNodesState } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import React from 'react';
 
 const initialNodes = [
     { id: '1', position: { x: 250, y: 0 }, data: { label: 'Claim #CLM-2025-001' }, type: 'input', style: { background: '#FFFFFF', color: '#0F172A', border: '1px solid #0EA5A4', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' } },
@@ -38,9 +38,34 @@ export default function ClaimOverview({ params }: { params: { id: string } }) {
     // Let's use useParams to be safe and standard for client components
     const { id } = React.use(params as any) as { id: string };
 
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const [actionType, setActionType] = React.useState<'approve' | 'reject' | 'siu' | null>(null);
+    const [rejectionReason, setRejectionReason] = React.useState('');
+
+    const confirmAction = () => {
+        if (actionType === 'approve') {
+            setClaim({ ...claim, status: 'Approved' });
+            alert('Payment Initiated via Stripe (Mock). Email sent to policyholder.');
+        } else if (actionType === 'reject') {
+            setClaim({ ...claim, status: 'Rejected' });
+            alert(`Claim Rejected. Rejection letter drafted with reason: "${rejectionReason}"`);
+        } else if (actionType === 'siu') {
+            setClaim({ ...claim, status: 'SIU' });
+            alert('Claim escalated to Special Investigations Unit (SIU). Fraud Agent notified.');
+        }
+        setModalOpen(false);
+        setActionType(null);
+        setRejectionReason('');
+    };
+
+    const onConnect = React.useCallback(
+        (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+        [setEdges],
+    );
+
     React.useEffect(() => {
         if (id) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ema-tyxf.vercel.app'}/claims/${id}`)
+            fetch(`http://localhost:8000/claims/${id}`)
                 .then(res => res.json())
                 .then(data => {
                     setClaim(data);
@@ -97,26 +122,78 @@ export default function ClaimOverview({ params }: { params: { id: string } }) {
 
                     <div className="bg-white border border-border rounded-xl p-6 shadow-sm">
                         <h3 className="text-lg font-semibold text-foreground mb-4">Actions</h3>
-                        <button className="w-full py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium shadow-lg shadow-accent/20 transition-all mb-3">
-                            Approve & Pay
-                        </button>
-                        <button className="w-full py-3 bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 rounded-lg font-medium transition-all">
-                            Reject Claim
-                        </button>
+
+                        {claim.status === 'Approved' ? (
+                            <div className="p-4 bg-green-50 text-green-700 rounded-lg border border-green-200 text-center font-medium">
+                                ✅ Claim Approved & Paid
+                            </div>
+                        ) : claim.status === 'Rejected' ? (
+                            <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 text-center font-medium">
+                                ❌ Claim Rejected
+                            </div>
+                        ) : claim.status === 'SIU' ? (
+                            <div className="p-4 bg-amber-50 text-amber-700 rounded-lg border border-amber-200 text-center font-medium">
+                                🕵️ Escalated to SIU
+                            </div>
+                        ) : (
+                            <div className="space-y-3">
+                                <button
+                                    onClick={() => { setActionType('approve'); setModalOpen(true); }}
+                                    className="w-full py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium shadow-lg shadow-accent/20 transition-all"
+                                >
+                                    Approve & Pay
+                                </button>
+
+                                <button
+                                    onClick={() => { setActionType('reject'); setModalOpen(true); }}
+                                    className="w-full py-3 bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 rounded-lg font-medium transition-all"
+                                >
+                                    Reject Claim
+                                </button>
+
+                                <button
+                                    onClick={() => { setActionType('siu'); setModalOpen(true); }}
+                                    className="w-full py-3 bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100 rounded-lg font-medium transition-all flex items-center justify-center gap-2"
+                                >
+                                    <span>⚠️</span> Escalate to SIU
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Center Column: Graph */}
                 <div className="col-span-6 bg-secondary border border-border rounded-xl overflow-hidden relative shadow-inner">
-                    <div className="absolute top-4 left-4 z-10 bg-white/80 backdrop-blur px-3 py-1 rounded-full border border-border shadow-sm">
+                    <div className="absolute top-4 left-4 z-10 bg-white/80 backdrop-blur px-3 py-1 rounded-full border border-border shadow-sm flex items-center gap-2">
                         <span className="text-xs font-medium text-muted">Evidence Graph</span>
                     </div>
+
+                    {/* Add Evidence Button */}
+                    <div className="absolute top-4 right-4 z-10">
+                        <button
+                            onClick={() => {
+                                const id = (nodes.length + 1).toString();
+                                const newNode = {
+                                    id,
+                                    position: { x: Math.random() * 400, y: Math.random() * 300 },
+                                    data: { label: 'New Evidence' },
+                                    style: { background: '#FFFFFF', color: '#64748B', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }
+                                };
+                                setNodes((nds) => nds.concat(newNode));
+                            }}
+                            className="bg-white hover:bg-slate-50 text-accent border border-border shadow-sm px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
+                        >
+                            <span>+</span> Add Evidence
+                        </button>
+                    </div>
+
                     <div className="h-full w-full">
                         <ReactFlow
                             nodes={nodes}
                             edges={edges}
                             onNodesChange={onNodesChange}
                             onEdgesChange={onEdgesChange}
+                            onConnect={onConnect}
                             fitView
                         >
                             <Background color="#94A3B8" gap={20} />
@@ -149,7 +226,7 @@ export default function ClaimOverview({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Tabs for Activity Log / Chat */}
-                    <div className="flex-1 min-h-0 flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden">
+                    <div className="flex-[3] min-h-0 flex flex-col bg-white border border-border rounded-xl shadow-sm overflow-hidden">
                         <div className="flex border-b border-border">
                             <button
                                 onClick={() => setActiveTab('activity')}
@@ -178,6 +255,100 @@ export default function ClaimOverview({ params }: { params: { id: string } }) {
                     </div>
                 </div>
             </div>
+
+            {/* Action Modal */}
+            {modalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+                        <div className={`p-6 border-b ${actionType === 'approve' ? 'bg-accent/10 border-accent/20' :
+                            actionType === 'reject' ? 'bg-red-50 border-red-100' :
+                                'bg-amber-50 border-amber-100'
+                            }`}>
+                            <h3 className={`text-xl font-bold ${actionType === 'approve' ? 'text-accent' :
+                                actionType === 'reject' ? 'text-red-700' :
+                                    'text-amber-700'
+                                }`}>
+                                {actionType === 'approve' && 'Approve Claim'}
+                                {actionType === 'reject' && 'Reject Claim'}
+                                {actionType === 'siu' && 'Escalate to SIU'}
+                            </h3>
+                            <p className="text-sm text-muted mt-1">
+                                {actionType === 'approve' && 'This will initiate the payment process.'}
+                                {actionType === 'reject' && 'This will close the claim and notify the policyholder.'}
+                                {actionType === 'siu' && 'This will flag the claim for fraud investigation.'}
+                            </p>
+                        </div>
+
+                        <div className="p-6 space-y-4">
+                            {actionType === 'approve' && (
+                                <div className="space-y-3">
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted">Claim Amount:</span>
+                                        <span className="font-medium">$1,913.13</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-muted">Deductible:</span>
+                                        <span className="font-medium text-red-500">-$500.00</span>
+                                    </div>
+                                    <div className="pt-3 border-t border-border flex justify-between text-lg font-bold">
+                                        <span>Total Payout:</span>
+                                        <span>$1,413.13</span>
+                                    </div>
+                                    <div className="p-3 bg-slate-50 rounded-lg text-xs text-muted">
+                                        Payment will be processed via Stripe Connect to the policyholder's registered bank account ending in •••• 4242.
+                                    </div>
+                                </div>
+                            )}
+
+                            {actionType === 'reject' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-foreground mb-2">Reason for Rejection</label>
+                                    <textarea
+                                        className="w-full p-3 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 min-h-[100px]"
+                                        placeholder="Please provide a detailed reason..."
+                                        value={rejectionReason}
+                                        onChange={(e) => setRejectionReason(e.target.value)}
+                                    ></textarea>
+                                </div>
+                            )}
+
+                            {actionType === 'siu' && (
+                                <div className="space-y-3">
+                                    <div className="p-3 bg-amber-50 text-amber-800 rounded-lg text-sm border border-amber-100">
+                                        <p className="font-medium mb-1">⚠️ SIU Escalation Protocol</p>
+                                        <p>Escalating this claim will freeze all payments and assign a Special Investigator. The policyholder will be notified that their claim is under review.</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-2">Suspicion Notes (Optional)</label>
+                                        <textarea
+                                            className="w-full p-3 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 min-h-[80px]"
+                                            placeholder="Describe the suspicious activity..."
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="p-6 border-t border-border bg-slate-50 flex justify-end gap-3">
+                            <button
+                                onClick={() => { setModalOpen(false); setRejectionReason(''); }}
+                                className="px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmAction}
+                                className={`px-6 py-2 text-sm font-medium text-white rounded-lg shadow-lg transition-all ${actionType === 'approve' ? 'bg-accent hover:bg-accent-hover shadow-accent/20' :
+                                    actionType === 'reject' ? 'bg-red-600 hover:bg-red-700 shadow-red-600/20' :
+                                        'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20'
+                                    }`}
+                            >
+                                Confirm {actionType === 'approve' ? 'Payment' : actionType === 'reject' ? 'Rejection' : 'Escalation'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </DashboardLayout>
     );
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import React from 'react';
+import { BellIcon, BookOpenIcon, BuildingStorefrontIcon, ChartBarIcon, ClipboardDocumentListIcon, Cog6ToothIcon, ExclamationTriangleIcon, HomeIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { HomeIcon, ChartBarIcon, Cog6ToothIcon, BellIcon } from '@heroicons/react/24/outline';
+import React from 'react';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -52,13 +52,55 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                         Analytics
                     </a>
                     <a
-                        href="/settings"
-                        data-active={isActive('/settings')}
+                        href="/work-queue"
+                        data-active={isActive('/work-queue')}
                         className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted hover:bg-slate-100 hover:text-foreground transition-all data-[active=true]:bg-accent/10 data-[active=true]:text-accent data-[active=true]:font-medium data-[active=true]:border data-[active=true]:border-accent/20 border border-transparent"
                     >
-                        <Cog6ToothIcon className="w-5 h-5" />
-                        Settings
+                        <ClipboardDocumentListIcon className="w-5 h-5" />
+                        Work Queue
                     </a>
+                    <a
+                        href="/policies"
+                        data-active={isActive('/policies')}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted hover:bg-slate-100 hover:text-foreground transition-all data-[active=true]:bg-accent/10 data-[active=true]:text-accent data-[active=true]:font-medium data-[active=true]:border data-[active=true]:border-accent/20 border border-transparent"
+                    >
+                        <ShieldCheckIcon className="w-5 h-5" />
+                        Policy Admin
+                    </a>
+                    <a
+                        href="/vendors"
+                        data-active={isActive('/vendors')}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted hover:bg-slate-100 hover:text-foreground transition-all data-[active=true]:bg-accent/10 data-[active=true]:text-accent data-[active=true]:font-medium data-[active=true]:border data-[active=true]:border-accent/20 border border-transparent"
+                    >
+                        <BuildingStorefrontIcon className="w-5 h-5" />
+                        Vendor Network
+                    </a>
+                    <a
+                        href="/siu"
+                        data-active={isActive('/siu')}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted hover:bg-slate-100 hover:text-foreground transition-all data-[active=true]:bg-accent/10 data-[active=true]:text-accent data-[active=true]:font-medium data-[active=true]:border data-[active=true]:border-accent/20 border border-transparent"
+                    >
+                        <ExclamationTriangleIcon className="w-5 h-5" />
+                        SIU / Fraud
+                    </a>
+                    <a
+                        href="/knowledge"
+                        data-active={isActive('/knowledge')}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted hover:bg-slate-100 hover:text-foreground transition-all data-[active=true]:bg-accent/10 data-[active=true]:text-accent data-[active=true]:font-medium data-[active=true]:border data-[active=true]:border-accent/20 border border-transparent"
+                    >
+                        <BookOpenIcon className="w-5 h-5" />
+                        Knowledge Base
+                    </a>
+                    <div className="pt-4 mt-4 border-t border-border">
+                        <a
+                            href="/settings"
+                            data-active={isActive('/settings')}
+                            className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted hover:bg-slate-100 hover:text-foreground transition-all data-[active=true]:bg-accent/10 data-[active=true]:text-accent data-[active=true]:font-medium data-[active=true]:border data-[active=true]:border-accent/20 border border-transparent"
+                        >
+                            <Cog6ToothIcon className="w-5 h-5" />
+                            Settings
+                        </a>
+                    </div>
                 </nav>
 
                 <div className="p-4 border-t border-border">
