@@ -65,7 +65,7 @@ export default function ClaimOverview({ params }: { params: { id: string } }) {
 
     React.useEffect(() => {
         if (id) {
-            fetch(`http://localhost:8000/claims/${id}`)
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ema-tyxf.vercel.app'}/claims/${id}`)
                 .then(res => res.json())
                 .then(data => {
                     setClaim(data);
